@@ -2,22 +2,39 @@
 
 module.exports = function(controller) {
 
-    //TODO: Use more than just the team table
-
-    // Each list of triggers for a certain entity (either a user, channel,
-    // or team) is stored in the database as so:
-    // {
-    //     "id": "ENTITY_ID",
-    //     "triggers": {
-    //         'foo': 'bar.com/pic1.jpg',
-    //         'memes': 'dreams.jpg',
-    //         ':reaction:': 'bigger-reaction.jpg'
-    //     }
-    // }
-
     // To allow for easy manipulation of trigger words, we then get only the keys
     // and put it into an array
     var keywords = [];
+
+    // Listen for a keyword and post a reaction image if you hear it
+    controller.hears(keywords, 'ambient', function(bot, message) {
+        console.log(bot)
+        console.log("@@@@@@@@@@@@@@@@@@@@@")
+        console.log(message)
+        console.log("@@@@@@@@@@@@@@@@@@@@@")
+        console.log(keywords)
+
+        controller.storage.teams.get(message.team, (err, team_data) => {
+            if(!err && team_data && team_data.triggers[message.match[0]]){
+                console.log(team_data.triggers[message.match[0]])
+
+                bot.reply(message, {
+                    'username': 'ReactionBot',
+                    'text': '',
+                    'attachments': [
+                        {
+                            'text': '',
+                            'image_url': team_data.triggers[message.match[0]]
+                        }
+                    ]
+                });
+            } else {
+                console.log('Detected word, but could not get reaction from database or reaction belongs to different team');
+                console.log(err);
+            }
+        });
+    });
+
 
     //TODO: Create different handlers for each team instead of handling all of them in these handlers here
 
@@ -189,26 +206,7 @@ https://reactionbot-js.herokuapp.com/contact.html
         bot.reply(message, help_message);
     });
 
-    // Listen for a keyword and post a reaction image if you hear it
-    controller.hears(keywords, 'ambient', function(bot, message) {
-        controller.storage.teams.get(message.team, (err, team_data) => {
-            if(!err && team_data && team_data.triggers[message.match[0]]){
-                bot.reply(message, {
-                    'username': 'ReactionBot',
-                    'text': '',
-                    'attachments': [
-                        {
-                            'text': '',
-                            'image_url': team_data.triggers[message.match[0]]
-                        }
-                    ]
-                });
-            } else {
-                console.log('Detected word, but could not get reaction from database or reaction belongs to different team');
-                console.log(err);
-            }
-        });
-    });
+
 
     // Uploading reactions to reactionbot
     // require("fs").readFile("./reactions.txt", "utf8", (err, data) => {
