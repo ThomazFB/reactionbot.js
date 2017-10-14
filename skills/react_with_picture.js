@@ -8,14 +8,16 @@ module.exports = function(controller) {
 
     // Listen for a keyword and post a reaction image if you hear it
     controller.hears(keywords, 'ambient', function(bot, message) {
-        console.log(bot)
-        console.log("@@@@@@@@@@@@@@@@@@@@@")
-        console.log(message)
-        console.log("@@@@@@@@@@@@@@@@@@@@@")
-        console.log(keywords)
-
         controller.storage.teams.get(message.team, (err, team_data) => {
+            
+            console.log("Team data: ")
+            console.log(team_data);
+
+            console.log("message.match[0] is: ")
+            console.log(message.match)
+
             if(!err && team_data && team_data.triggers[message.match[0]]){
+                console.log("Found match: ")
                 console.log(team_data.triggers[message.match[0]])
 
                 bot.reply(message, {
