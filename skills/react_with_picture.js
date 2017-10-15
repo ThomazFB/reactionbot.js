@@ -101,7 +101,8 @@ module.exports = function(controller) {
     
     // Remove command
     controller.hears('^remove (.*)', 'direct_message,direct_mention', function(bot, message) {
-        if (trigger = message.match[1]){
+        const trigger = message.match[1];
+        if (trigger){
             
             // Remove from db (actually just another add that overwrites)
             controller.storage.teams.get(message.team, function(err, team_data){
@@ -132,7 +133,8 @@ module.exports = function(controller) {
 
     //Get command
     controller.hears('^get (.*)', 'direct_message,direct_mention', function(bot, message){
-        if (trigger = message.match[1]){
+        const trigger = message.match[1];
+        if (trigger){
             controller.storage.teams.get(message.team, (err, team_data) => {
                 if(!err && team_data.triggers && team_data.triggers[trigger]){
                     bot.reply(message, {
@@ -200,9 +202,9 @@ https://reactionbot-js.herokuapp.com/contact.html
     });
 
     function extract_url(text){
-        let match = /<([^>\|]+)(?:\|([^>]+))?>/g.exec(text);
-        if(url = match[1]){
-            return decodeURIComponent(url) // Remove percent encoding 
+        const match = /<([^>\|]+)(?:\|([^>]+))?>/g.exec(text);
+        if(match[1]){
+            return decodeURIComponent(match[1]) // Remove percent encoding 
         }
     }
 };
