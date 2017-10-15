@@ -13,6 +13,7 @@
     "dashbot": "0.7.4",
     "debug": "^2.3.3",
     "dotenv": "^4.0.0",
+    "escape-string-regexp": "^1.0.5",
     "express": "^4.14.0",
     "querystring": "^0.2.0",
     "request": "^2.79.0"
